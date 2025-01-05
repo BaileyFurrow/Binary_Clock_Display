@@ -1,0 +1,19 @@
+:root {
+  /* Variables */
+  --canvas-width: 500px;
+  --canvas-height: var(--canvas-width) / 2;
+}
+
+label::before {
+  content: ' ';
+  clear: right;
+  display: block;
+}
+
+canvas {
+  border: 1px solid black;
+  display: block;
+  margin: 1rem;
+  width: var(--canvas-width);
+  height: var(--canvas-height);
+}

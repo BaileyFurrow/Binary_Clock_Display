@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Binary Clock Display</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Binary Clock Display</h1>
+        <h5>
+            This is originally from my Code Pen, but I decided to port it to my
+            GitHub as well. Check out the original using the link below.
+        </h5>
+        <h5>
+            <a href="https://codepen.io/baileyfurrow/pen/xxjQpQv">
+                Binary Clock Display on CodePen.IO
+            </a>
+        </h5>
+        <div id="app">
+            <canvas width="500" height="250"></canvas>
+            <button id="showClock">Start</button>
+            <button id="stopClock">Stop</button>
+            <button id="clear">Clear</button>
+
+            <label for="width">Width:</label>
+            <input type="number" name="width" id="width" value="500" />
+
+            <label for="milli">Show Milliseconds</label>
+            <input type="checkbox" name="milli" id="milli" />
+        </div>
+        <script src="app.js"></script>
+    </body>
+</html>
