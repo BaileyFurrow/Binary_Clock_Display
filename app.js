@@ -4,6 +4,7 @@ const STOP_BUTTON = document.querySelector("#stopClock");
 const CLEAR_BUTTON = document.querySelector("#clear");
 const WIDTH = document.querySelector("#width");
 const MILLI = document.querySelector("#milli");
+const HELP_LINK = document.getElementById("helpWindowLink");
 
 let animate,
     time = [];
@@ -112,4 +113,86 @@ CLEAR_BUTTON.addEventListener("click", clearCanvas);
 
 WIDTH.addEventListener("change", () => {
     document.querySelector(":root").style.setProperty("--canvas-width", `${WIDTH.value}px`);
+});
+
+
+// How to read help window
+
+HELP_LINK.addEventListener('click', () => {
+    let txtHelp = `
+        <h2>Reading a Binary Clock</h2>
+        <p>Each part of the clock (hours, minutes, seconds, and milliseconds) is represented as a byte (8 bits), with
+        each 2x4 grid of squares representing one byte and each square representing one byte. It is meant to be read
+        column-by-column. See below for a few examples:</p>
+        <div style="display: inline-block; margin: 10px;">
+        <h4>42</h4>
+        <canvas id="example1"></canvas>
+        </div>
+        <div style="display: inline-block; margin: 0 10px;">
+        <h4>59</h4>
+        <canvas id="example2"></canvas>
+        </div>
+        <div style="display: inline-block; margin: 10px;">
+        <h4>24</h4>
+        <canvas id="example3"></canvas>
+        </div>
+        <div style="display: inline-block; margin: 10px;">
+        <h4>19</h4>
+        <canvas id="example4"></canvas>
+        </div>
+        <p>Interestingly, the first two squares in the first column will never be used, as no part of the clock will
+        ever count higher than 59, and a byte can represent numbers as large as 255. These unused spaces were left in 
+        intentionally for symmetry.</p>
+        <button style="display: flex; align-items: center; margin: 5px auto" onClick="window.close()">Close</button>
+    `;
+    let helpWindow = window.open('','','height=600,width=600,menubar=no,status=no');
+    helpWindow.document.body.innerHTML = txtHelp;
+    helpWindow.document.body.style.lineHeight = "1.2";
+    helpWindow.document.body.style.margin = "8px";
+    helpWindow.document.title = "How to Read a Binary Clock";
+    let helpStyle = helpWindow.document.createElement('link');
+    helpStyle.rel = 'stylesheet';
+    helpStyle.href = 'style.css';
+    helpWindow.document.head.append(helpStyle);
+
+    let example1 = helpWindow.document.getElementById("example1");
+    let e1Obj = new BinaryDisplay(42, 0, 0, 50, 2, example1);
+    example1.height = e1Obj.canvasHeight;
+    example1.width = e1Obj.canvasWidth;
+    e1Obj.drawNumber();
+
+    let example2 = helpWindow.document.getElementById("example2");
+    let e2Obj = new BinaryDisplay(59, 0, 0, 50, 2, example2);
+    example2.height = e2Obj.canvasHeight;
+    example2.width = e2Obj.canvasWidth;
+    e2Obj.drawNumber();
+
+    let example3 = helpWindow.document.getElementById("example3");
+    let e3Obj = new BinaryDisplay(24, 0, 0, 50, 2, example3);
+    example3.height = e3Obj.canvasHeight;
+    example3.width = e3Obj.canvasWidth;
+    e3Obj.drawNumber();
+
+    let example4 = helpWindow.document.getElementById("example4");
+    let e4Obj = new BinaryDisplay(19, 0, 0, 50, 2, example4);
+    example4.height = e4Obj.canvasHeight;
+    example4.width = e4Obj.canvasWidth;
+    e4Obj.drawNumber();
+
+    let canvases = helpWindow.document.querySelectorAll("canvas");
+    canvases.forEach(c => {
+        let ctx = c.getContext("2d");
+        ctx.globalAlpha = 0.5;
+        ctx.font = "50px sans-serif";
+        ctx.fillStyle = "#000000";
+        ctx.fillText("128", 0, 40, 50);
+        ctx.fillText("64", 0, 95, 50);
+        ctx.fillText("32", 0, 145, 50);
+        ctx.fillText("16", 0, 195, 50);
+
+        ctx.fillText("8", 65, 40, 50);
+        ctx.fillText("4", 65, 95, 50);
+        ctx.fillText("2", 65, 145, 50);
+        ctx.fillText("1", 65, 195, 50);
+    })
 });
