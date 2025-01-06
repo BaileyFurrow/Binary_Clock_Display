@@ -1,5 +1,4 @@
 const CANVAS = document.querySelector("canvas");
-const CTX = CANVAS.getContext("2d");
 const SHOW_BUTTON = document.querySelector("#showClock");
 const STOP_BUTTON = document.querySelector("#stopClock");
 const CLEAR_BUTTON = document.querySelector("#clear");
@@ -21,12 +20,14 @@ let animate,
  * @param {number} spacing  Padding space to put between each cell
  */
 class BinaryDisplay {
-    constructor(num = 0, x = 0, y = 0, size = 10, spacing = 2) {
+    constructor(num = 0, x = 0, y = 0, size = 10, spacing = 2, canvas=CANVAS) {
         this.posX = x;
         this.posY = y;
         this.setNumber(num);
         this.size = size;
         this.spacing = spacing;
+        this.canvas = canvas;
+        this.context = canvas.getContext("2d");
         this.offColor = "#bbf";
         this.onColor = "#00f";
         this.canvasHeight = 4 * this.size + 3 * this.spacing;
@@ -48,8 +49,8 @@ class BinaryDisplay {
     }
 
     drawSquare(x, y, blank, i) {
-        CTX.fillStyle = blank ? this.offColor : this.onColor;
-        CTX.fillRect(
+        this.context.fillStyle = blank ? this.offColor : this.onColor;
+        this.context.fillRect(
             (this.spacing + this.size) * y + this.x,
             (this.spacing + this.size) * x + this.y,
             this.size,
@@ -68,10 +69,6 @@ class BinaryDisplay {
         this.setNumber(newNum);
         this.drawNumber();
     }
-
-    static clear() {
-        CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
-    }
 }
 
 function tickTock(size = 10, spacingMult = 1) {
@@ -84,12 +81,17 @@ function tickTock(size = 10, spacingMult = 1) {
     });
 }
 
+function clearCanvas() {
+    let ctx = CANVAS.getContext('2d');
+    ctx.clearRect(0, 0, CANVAS.width, CANVAS.height);
+}
+
 SHOW_BUTTON.addEventListener("click", () => {
     if (animate) clearInterval(animate);
     time = [];
     let size = 30,
         spacingMult = 1.1;
-    BinaryDisplay.clear();
+    clearCanvas();
     let now = new Date();
     time.push(new BinaryDisplay(now.getHours(), 0, 0, size));
     time.push(new BinaryDisplay(now.getMinutes(), 1 * spacingMult, 0, size));
@@ -106,9 +108,7 @@ STOP_BUTTON.addEventListener("click", () => {
     clearInterval(animate);
 });
 
-CLEAR_BUTTON.addEventListener("click", () => {
-    BinaryDisplay.clear();
-});
+CLEAR_BUTTON.addEventListener("click", clearCanvas);
 
 WIDTH.addEventListener("change", () => {
     document.querySelector(":root").style.setProperty("--canvas-width", `${WIDTH.value}px`);

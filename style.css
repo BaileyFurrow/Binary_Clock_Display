@@ -21,14 +21,14 @@ canvas {
     height: var(--canvas-height);
 }
 
-.link-buttons {
+.link-buttons, #helpWindowLink {
     border: 1px solid #aaa;
     border-radius: 5px;
     display: flex;
     align-items: center;
     text-align: center;
     padding: 6px;
-    min-width: 225px;
+    /* min-width: 225px; */
     max-width: fit-content;
     background-color: #eee;
     margin: 10px 0;
@@ -36,7 +36,7 @@ canvas {
     color: initial;
 }
 
-.link-buttons:hover {
+.link-buttons:hover, #helpWindowLink:hover {
     background-color: #bbb;
     border: 2px solid #333;
 }
