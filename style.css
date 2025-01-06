@@ -1,6 +1,6 @@
 :root {
     /* Variables */
-    --canvas-width: 500px;
+    --canvas-width: 200px;
     --canvas-height: var(--canvas-width) / 2;
 }
 

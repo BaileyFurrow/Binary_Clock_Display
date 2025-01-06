@@ -30,6 +30,9 @@ class BinaryDisplay {
         this.offColor = "#bbf";
         this.onColor = "#00f";
         this.canvasHeight = 4 * this.size + 3 * this.spacing;
+        this.canvasWidth = 2 * this.size + this.spacing;
+        this.x = (2 * this.spacing + 2 * this.size) * this.posX;
+        this.y = (2 * this.spacing + 2 * this.size) * this.posY;
     }
     setNumber(number) {
         try {
@@ -37,7 +40,7 @@ class BinaryDisplay {
                 throw new RangeError("The number must be between 0-255.");
             this.num = Number(number);
             this.binNum = this.num.toString(2).padStart(8, "0");
-            console.log(this.num, this.binNum);
+            // console.log(this.num, this.binNum);
         } catch (e) {
             console.error("Invalid input!");
             console.error(e.toString());
@@ -47,10 +50,8 @@ class BinaryDisplay {
     drawSquare(x, y, blank, i) {
         CTX.fillStyle = blank ? this.offColor : this.onColor;
         CTX.fillRect(
-            (this.spacing + this.size) * y +
-                (2 * this.spacing + 2 * this.size) * this.posX,
-            (this.spacing + this.size) * x +
-                (2 * this.spacing + 2 * this.size) * this.posY,
+            (this.spacing + this.size) * y + this.x,
+            (this.spacing + this.size) * x + this.y,
             this.size,
             this.size
         );
@@ -94,15 +95,10 @@ SHOW_BUTTON.addEventListener("click", () => {
     time.push(new BinaryDisplay(now.getMinutes(), 1 * spacingMult, 0, size));
     time.push(new BinaryDisplay(now.getSeconds(), 2 * spacingMult, 0, size));
     if (MILLI.checked)
-        time.push(
-            new BinaryDisplay(
-                Math.floor(now.getMilliseconds() / 10),
-                3 * spacingMult,
-                0,
-                size
-            )
-        );
+        time.push(new BinaryDisplay(Math.floor(now.getMilliseconds() / 10), 3 * spacingMult, 0, size));
     CANVAS.height = Math.max(...time.map((elem) => elem.canvasHeight));
+    let lastElem = time.length - 1;
+    CANVAS.width = time[lastElem].x + time[lastElem].canvasWidth;
     animate = setInterval(tickTock, 10, 30, 1.1);
 });
 
@@ -115,7 +111,5 @@ CLEAR_BUTTON.addEventListener("click", () => {
 });
 
 WIDTH.addEventListener("change", () => {
-    document
-        .querySelector(":root")
-        .style.setProperty("--canvas-width", `${WIDTH.value}px`);
+    document.querySelector(":root").style.setProperty("--canvas-width", `${WIDTH.value}px`);
 });
